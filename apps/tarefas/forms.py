@@ -1,0 +1,8 @@
+from django import forms
+from .models import TarefaModel
+
+class TarefaForm(forms.ModelForm):
+    class Meta:
+        ordering = ['nome']
+        model = TarefaModel
+        fields = ['nome', 'descricao', 'completo']
