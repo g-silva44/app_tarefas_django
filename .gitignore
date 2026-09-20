@@ -39,6 +39,8 @@ wheels/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+**/migrations
+apps/migrations/
 
 # Diretórios de Uploads e Arquivos Estáticos Coletados
 media/

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class TarefaModel(models.Model):
     nome = models.CharField(max_length=100)
@@ -9,3 +10,7 @@ class TarefaModel(models.Model):
 
     def __str__(self):
         return self.nome
+
+    class Meta:
+        ordering = ['nome']
+        db_table = 'tarefas'

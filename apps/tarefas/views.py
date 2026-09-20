@@ -3,12 +3,14 @@ from django.http import HttpRequest, HttpResponse
 from .forms import TarefaForm
 from .models import TarefaModel
 
+
 # Create your views here.
 
 def index_view(request):
     return render(request, 'index.html')
 
-def tarefas_adicionar (request: HttpRequest):
+
+def tarefas_adicionar(request):
     if request.method == 'POST':
         form = TarefaForm(request.POST)
         if form.is_valid():
@@ -18,9 +20,11 @@ def tarefas_adicionar (request: HttpRequest):
 
         'form': TarefaForm()
     }
+
     return render(request, 'tarefas/adicionar.html', context)
 
-def tarefas_home (request):
+
+def tarefas_home(request):
     context = {
         'nome': 'João',
         'tarefas': TarefaModel.objects.all()
