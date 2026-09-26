@@ -1,16 +1,95 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Sistema de tarefas</title>
-  </head>
-  <body>
-    <h2>Adicionar Tarefa</h2>
-    <form method="post">
-      {% csrf_token %} {{ form.as_p }}
-      <button type="submit">Adicionar</button>
-    </form>
-  </body>
-</html>
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h3 class="card-title fw-bold text-primary mb-4">
+                            {% if form.instance.pk %}
+                                <i class="fa-solid fa-pen-to-square me-2"></i>editar tarefa
+                            {% else %}
+                                <i class="fa-solid fa-plus-circle me-2"></i>nova tarefa
+                            {% endif %}
+                        </h3>
+
+                        <!-- Alertas de erros gerais do formulário -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger py-2" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Campo Nome -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold" for="id_nome">
+                                    {{ form.nome.label|default:"Nome da tarefa" }}
+                                </label>
+                                <input
+                                        type="text"
+                                        name="nome"
+                                        id="id_nome"
+                                        class="form-control {% if form.nome.errors %}is-invalid{% endif %}"
+                                        value="{{ form.nome.value|default:'' }}"
+                                        placeholder="Ex: Finalizar relatório..."
+                                        required>
+                                {% if form.nome.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.nome.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Campo Descrição -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold" for="id_descricao">
+                                    {{ form.descricao.label|default:"Descrição" }}
+                                </label>
+                                <textarea
+                                        name="descricao"
+                                        id="id_descricao"
+                                        rows="3"
+                                        class="form-control {% if form.descricao.errors %}is-invalid{% endif %}"
+                                        placeholder="Detalhes opcionais da tarefa...">{{ form.descricao.value|default:'' }}</textarea>
+                                {% if form.descricao.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.descricao.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Campo Completo (Switch/Checkbox estilizado) -->
+                            <div class="mb-4 form-check form-switch">
+                                <input
+                                        type="checkbox"
+                                        name="completo"
+                                        id="id_completo"
+                                        class="form-check-input"
+                                        role="switch"
+                                        {% if form.completo.value %}checked{% endif %}>
+                                <label class="form-check-label fw-semibold" for="id_completo">
+                                    {{ form.completo.label|default:"Marcar como concluída" }}
+                                </label>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                                <a href="{% url 'tarefas_home' %}" class="btn btn-outline-secondary">
+                                    cancelar
+                                </a>
+                                <button class="btn btn-primary d-inline-flex align-items-center" type="submit">
+                                    <i class="fa-solid fa-check me-1"></i>
+                                    salvar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
