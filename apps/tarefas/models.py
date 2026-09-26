@@ -12,5 +12,5 @@ class TarefaModel(models.Model):
         return self.nome
 
     class Meta:
-        ordering = ['nome']
+        ordering = ['-data_criacao', 'nome']
         db_table = 'tarefas'

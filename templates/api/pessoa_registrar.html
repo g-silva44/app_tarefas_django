@@ -1,0 +1,33 @@
+{% extends 'base_template.html' %}
+{% block content %}
+    <form action="{{ request.path }}" method="POST" enctype="multipart/form-data"
+          class="input_mask form-grupo" novalidate>
+        {% csrf_token %}
+        <div class="mb-3 card-body">
+            <div class="row">
+                <div class="">
+                    <label class="control-label">{{ form.nome.label }}</label></div>
+                {{ form.nome }}
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="control-label">{{ form.senha.label }}</label></div>
+                {{ form.senha }}
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="control-label">{{ form.telefone.label }}</label></div>
+                {{ form.telefone }}
+            </div>
+            <div class="row">
+                <div class="">
+                    <label class="control-label">{{ form.email.label }}</label></div>
+                {{ form.email }}
+            </div>
+        </div>
+        <div class="mb-3">
+
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}

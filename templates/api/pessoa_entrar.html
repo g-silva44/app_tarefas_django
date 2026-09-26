@@ -1,0 +1,8 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <form>
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">entrar</button>
+    </form>
+{% endblock %}

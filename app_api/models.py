@@ -1,8 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
-# Create your models here.
-class PessoaModel(models.Model):
+class PessoaModel(AbstractUser):
     nome = models.CharField(max_length=100)
     email = models.EmailField()
     senha = models.CharField(max_length=100)

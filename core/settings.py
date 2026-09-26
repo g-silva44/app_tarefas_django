@@ -110,8 +110,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
@@ -120,3 +118,17 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+AUTH_USER_MODEL = 'app_api.PessoaModel'
+
+LOGIN_URL = '/perfil/entrar/'
+LOGIN_REDIRECT_URL = 'tarefas_home'
+LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_URL = '/perfil/sair/'
+LOGOUT_ON_PASSWORD_CHANGE = True
+
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
