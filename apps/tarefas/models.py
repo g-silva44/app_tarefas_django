@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 
@@ -7,6 +9,8 @@ class TarefaModel(models.Model):
     descricao = models.TextField(null=True, blank=True)
     completo = models.BooleanField(default=False)
     data_criacao = models.DateTimeField(auto_now_add=True)
+    data_modificacao = models.DateTimeField(auto_now=True)
+    data_expiracao = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.nome

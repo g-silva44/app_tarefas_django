@@ -8,6 +8,11 @@
           row-cols-lg-3: 3 colunas no desktop
           g-4: espaçamento uniforme (gutter) entre linhas e colunas
         -->
+
+        <a class="btn btn-primary mb-4" href="{% url 'tarefas_adicionar' %}" role="button">
+            <i class="fa-solid fa-plus me-1"></i> adicionar tarefa
+        </a>
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
             {% for tarefa in tarefas %}
                 <div class="col">
@@ -57,9 +62,5 @@
                 </div>
             {% endfor %}
         </div>
-
-        <a class="btn btn-primary" href="{% url 'tarefas_adicionar' %}" role="button">
-            <i class="fa-solid fa-plus me-1"></i> adicionar tarefa
-        </a>
     </div>
 {% endblock %}

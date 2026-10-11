@@ -72,8 +72,21 @@
                                         role="switch"
                                         {% if form.completo.value %}checked{% endif %}>
                                 <label class="form-check-label fw-semibold" for="id_completo">
-                                    {{ form.completo.label|default:"Marcar como concluída" }}
+                                    {{ form.completo.label|default:"marcar como concluída" }}
                                 </label>
+                            </div>
+
+                            <div class="mb-4 form-date">
+                                <label class="form-check-label fw-semibold" for="id_completo">
+                                    {{ form.data_expiracao.label|default:"data de expiração" }}
+                                </label>
+                                <input
+                                        type="date"
+                                        name="data_expiracao"
+                                        id="id_expiracao"
+                                        class="form-control"
+                                >
+
                             </div>
 
                             <!-- Botões de Ação -->

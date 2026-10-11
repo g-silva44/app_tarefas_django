@@ -1,6 +1,10 @@
+from datetime import datetime
+
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
+from django.utils import timezone
+
 from .forms import TarefaForm
 from .models import TarefaModel
 
@@ -8,7 +12,15 @@ from .models import TarefaModel
 # Create your views here.
 
 def index_view(request):
-    return render(request, 'index.html')
+    username = request.user.username
+    ultimas_tarefas = TarefaModel.objects.order_by('-data_criacao')[:3]
+    tarefas_atrasadas = TarefaModel.objects.filter(
+        completo=False,
+        data_expiracao__lt=timezone.now(),
+    )
+
+    return render(request, 'index.html',
+                  {'username': username, 'ultimas_tarefas': ultimas_tarefas, 'atrasadas': tarefas_atrasadas})
 
 
 def tarefas_adicionar(request):
