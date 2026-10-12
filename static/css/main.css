@@ -2,3 +2,557 @@ button {
     border-style: none;
     outline-style: none;
 }
+
+.notepad {
+    --paper: #fffdf7;
+    --ink: #44443e;
+    --muted: #8b887e;
+    --line: #eae7de;
+    --accent: #a86454;
+
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 40px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid #e8e4d9;
+    border-radius: 3px;
+    box-shadow: 0 6px 24px rgba(65, 57, 40, .04);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.notepad-header {
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+}
+
+.notepad-header h1 {
+    margin: 0 0 10px;
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -.05em;
+}
+
+.notepad-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+.notepad-section + .notepad-section {
+    margin-top: 40px;
+}
+
+.notepad-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.notepad-heading span {
+    color: var(--muted);
+    font-size: .75rem;
+}
+
+.notepad-heading h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -.03em;
+}
+
+.note {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 22px 20px 18px 32px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+}
+
+.note::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 19px;
+    width: 1px;
+    background: #eedbd4;
+    content: "";
+}
+
+.note-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.note-number {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.note-title {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 500;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.note-description {
+    flex-grow: 1;
+    min-height: 84px;
+    margin: 0;
+    color: #777469;
+    font-size: .8rem;
+    line-height: 28px;
+    overflow-wrap: anywhere;
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 27px,
+            var(--line) 27px,
+            var(--line) 28px
+    );
+}
+
+.note-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 18px;
+}
+
+.note-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.note-status.overdue {
+    color: var(--accent);
+}
+
+.note-status.complete {
+    color: #70816b;
+}
+
+.note-link,
+.note-link:visited {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 0;
+    color: #777469;
+    font-size: .7rem;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+.note-link:hover {
+    color: var(--ink);
+    border-bottom-color: #aaa497;
+}
+
+.note-link:focus-visible {
+    outline: 2px solid #aaa497;
+    outline-offset: 4px;
+}
+
+.note-empty {
+    padding: 24px 0;
+    color: var(--muted);
+    font-size: .8rem;
+    border-top: 1px dashed var(--line);
+}
+
+:root {
+    --app-background: #f5f3ed;
+    --app-paper: #fffdf7;
+    --app-ink: #44443e;
+    --app-muted: #777469;
+    --app-line: #e5e1d7;
+    --app-accent: #a86454;
+}
+
+body.app-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--app-ink);
+    background: var(--app-background);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+}
+
+.app-navbar {
+    padding: 20px 0;
+    background: var(--app-paper);
+    border-bottom: 1px solid var(--app-line);
+}
+
+.app-nav-container {
+    max-width: 1100px;
+}
+
+.app-navbar .app-brand {
+    margin: 0;
+    color: var(--app-ink);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -.08em;
+}
+
+.app-navbar .app-brand:hover {
+    color: var(--app-ink);
+}
+
+.app-brand-dot {
+    color: var(--app-accent);
+}
+
+.app-navbar .app-nav-link {
+    padding: 8px 0;
+    color: var(--app-muted);
+    font-size: .8rem;
+}
+
+.app-navbar .app-nav-link:hover,
+.app-navbar .app-nav-link.active {
+    color: var(--app-ink);
+}
+
+.app-navbar .app-nav-link.active {
+    text-decoration: underline;
+    text-decoration-color: #b8b0a0;
+    text-underline-offset: 6px;
+}
+
+.app-nav-toggle {
+    padding: 6px;
+    font-size: .85rem;
+    border: 1px solid var(--app-line);
+    border-radius: 3px;
+}
+
+.app-nav-toggle:focus {
+    box-shadow: none;
+}
+
+.app-body a:focus-visible,
+.app-body button:focus-visible {
+    outline: 2px solid var(--app-accent);
+    outline-offset: 4px;
+}
+
+.app-content {
+    flex: 1;
+    width: 100%;
+    max-width: 1148px;
+    padding-top: 24px;
+    padding-bottom: 40px;
+}
+
+.app-footer {
+    padding: 20px 0;
+    color: var(--app-muted);
+    border-top: 1px solid var(--app-line);
+    font-size: .7rem;
+}
+
+.app-footer .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 1100px;
+}
+
+.notebook-nav {
+    margin: 0 24px;
+    background: transparent;
+}
+
+.notebook-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid #dcd7cb;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.notebook-nav .notebook-brand {
+    color: #44443e;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: -.08em;
+    text-decoration: none;
+}
+
+.notebook-brand span {
+    color: #a86454;
+}
+
+.notebook-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.notebook-nav .notebook-links a {
+    padding: 4px 0;
+    color: #777469;
+    font-size: .8rem;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+.notebook-nav .notebook-links a:hover,
+.notebook-nav .notebook-links a.is-current {
+    color: #44443e;
+    border-bottom-color: #a86454;
+}
+
+.notebook-nav a:focus-visible {
+    outline: 2px solid #a86454;
+    outline-offset: 5px;
+}
+
+.note {
+    background: #f3efe4;
+    border-color: #d6cebc;
+    box-shadow: 0 2px 5px rgba(65, 57, 40, .06);
+}
+
+.note::before {
+    background: #dcbcaf;
+}
+
+.note-description {
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 27px,
+            #e1dacb 27px,
+            #e1dacb 28px
+    );
+}
+
+.task-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.notebook-button,
+.notebook-button:visited {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    color: #555044;
+    background: #eee8da;
+    border: 1px solid #cfc5b1;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: .8rem;
+    text-decoration: none;
+}
+
+.notebook-button:hover {
+    color: #44443e;
+    background: #e5ddcc;
+    border-color: #b9ac94;
+}
+
+.notebook-button:focus-visible {
+    outline: 2px solid #a86454;
+    outline-offset: 4px;
+}
+
+.task-list {
+    margin: 0 auto;
+    padding: 22px 26px;
+}
+
+.task-list .notepad-header {
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+}
+
+.task-list .notepad-header h1 {
+    margin-bottom: 6px;
+    font-size: 1.5rem;
+}
+
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.task-list .note {
+    min-width: 0;
+    padding: 12px 14px 10px 26px;
+}
+
+.task-list .note::before {
+    left: 15px;
+}
+
+.task-list .note-header {
+    margin-bottom: 6px;
+}
+
+.task-heading {
+    min-width: 0;
+}
+
+.task-list .note-number {
+    margin-bottom: 3px;
+    font-size: .65rem;
+}
+
+.task-list .note-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: .85rem;
+}
+
+.task-list .note-description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    flex-grow: 0;
+    min-height: 44px;
+    height: 44px;
+    line-height: 22px;
+    font-size: .75rem;
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 21px,
+            #e1dacb 21px,
+            #e1dacb 22px
+    );
+}
+
+.note-expiration {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    color: #777469;
+    font-size: .68rem;
+}
+
+.task-list .note-footer {
+    margin-top: auto;
+    padding-top: 8px;
+    gap: 8px;
+}
+
+.task-grid-empty {
+    grid-column: 1 / -1;
+}
+
+.task-list .notepad-section + .notepad-section {
+    margin-top: 24px;
+}
+
+.task-list .notepad-heading {
+    margin-bottom: 12px;
+}
+
+@media (max-width: 991.98px) {
+    .task-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .task-list {
+        padding: 20px 16px;
+    }
+
+    .task-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .task-list-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .notebook-nav {
+        margin: 0 18px;
+    }
+
+    .notebook-nav-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 20px;
+    }
+
+    .notebook-links {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .app-navbar .navbar-collapse {
+        margin-top: 18px;
+        padding-top: 12px;
+        border-top: 1px solid var(--app-line);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .app-navbar {
+        padding: 16px 0;
+    }
+
+    .app-content {
+        padding-top: 12px;
+    }
+
+    .app-content .notepad {
+        margin: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .notepad {
+        margin: 12px;
+        padding: 24px 18px;
+    }
+}

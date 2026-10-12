@@ -1,113 +1,149 @@
 {% extends 'base_template.html' %}
 
 {% block content %}
-    <div><h1>olá {{ username }}!</h1>
-        <p>essas são suas tarefas.</p></div>
+    <main class="notepad task-list">
+        <header class="notepad-header">
+            <h1>olá, {{ username }}.</h1>
+            <p>um espaço para organizar suas tarefas, uma de cada vez.</p>
+        </header>
 
-    <div>
-        <div><h2>atrasadas</h2>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        <section class="notepad-section" aria-labelledby="titulo-atrasadas">
+            <div class="notepad-heading">
+                <span aria-hidden="true">01.</span>
+                <h2 id="titulo-atrasadas">atrasadas</h2>
+            </div>
+
+            <div class="task-grid">
                 {% for tarefa in atrasadas %}
-                    <div class="col">
-                        <div class="card bg-light h-100 p-3 shadow-sm border-1">
-                            <div class="card-body d-flex flex-column p-0">
-                                <div class="d-flex justify-content-between flex-wrap"
-                                >
-                                    <h5 class="text-primary mb-2"><strong>#{{ tarefa.id }} {{ tarefa.nome }}</strong>
-                                    </h5>
-                                    <a class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2"
-                                       href="{% url 'tarefas_editar' tarefa.id %}">
-                                        <i class="fa-solid fa-pencil"></i><span>editar</span>
-                                    </a>
-                                </div>
-
-                                <!-- flex-grow-1 empurra as ações/badges para a base do card -->
-                                <p class=" card-text text-secondary flex-grow-1">{{ tarefa.descricao }}</p>
-
-                                <div class="d-flex align-items-center gap-2 mt-3 pt-2 border-top">
-                                    {% if tarefa.completo %}
-                                        <span class="badge text-bg-success d-inline-flex align-items-center gap-1 py-2 px-3">
-                                        <i class="fa-regular fa-square-check"></i>
-                                        <span>concluída</span>
-                                    </span>
-                                        <a href="{% url 'tarefas_reabrir' tarefa.id %}"
-                                           class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2">
-                                            <i class="fa-regular fa-square-check"></i>
-                                            <span>reabrir</span>
-                                        </a>
-                                    {% else %}
-                                        <span class="badge text-bg-warning d-inline-flex align-items-center gap-1 py-2 px-3">
-                                        <i class="fa-regular fa-clock"></i>
-                                        <span>pendente</span>
-                                    </span>
-                                        <a href="{% url 'tarefas_concluir' tarefa.id %}"
-                                           class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2">
-                                            <i class="fa-regular fa-square-check"></i>
-                                            <span>concluir</span>
-                                        </a>
-                                    {% endif %}
-                                </div>
+                    <article class="note">
+                        <div class="note-header">
+                            <div class="task-heading">
+                                <span class="note-number">#{{ tarefa.id }}</span>
+                                <h3 class="note-title" title="{{ tarefa.nome }}">
+                                    {{ tarefa.nome }}
+                                </h3>
                             </div>
+
+                            <a href="{% url 'tarefas_editar' tarefa.id %}"
+                               class="note-link"
+                               aria-label="editar tarefa {{ tarefa.nome }}">
+                                editar
+                            </a>
                         </div>
-                    </div>
+
+                        <p class="note-description" title="{{ tarefa.descricao }}">
+                            {{ tarefa.descricao|default:"sem descrição." }}
+                        </p>
+
+                        <div class="note-expiration">
+                            <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                            prazo:
+                            {% if tarefa.data_expiracao %}
+                                <time datetime="{{ tarefa.data_expiracao|date:'c' }}">
+                                    {{ tarefa.data_expiracao|date:"d/m/Y" }}
+                                </time>
+                            {% else %}
+                                sem prazo
+                            {% endif %}
+                        </div>
+
+                        <div class="note-footer">
+                            <span class="note-status overdue">
+                                <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                                atrasada
+                            </span>
+
+                            <a href="{% url 'tarefas_concluir' tarefa.id %}"
+                               class="note-link">
+                                concluir
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
                 {% empty %}
-                    <div class="col-12">
-                        <div class="alert alert-info mb-0">nenhuma tarefa encontrada.</div>
+                    <div class="note-empty task-grid-empty">
+                        tudo em dia. nenhuma tarefa atrasada.
                     </div>
                 {% endfor %}
             </div>
-        </div>
-        <div><h2>últimas adicionadas</h2>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        </section>
+
+        <section class="notepad-section" aria-labelledby="titulo-recentes">
+            <div class="notepad-heading">
+                <span aria-hidden="true">02.</span>
+                <h2 id="titulo-recentes">últimas adicionadas</h2>
+            </div>
+
+            <div class="task-grid">
                 {% for tarefa in ultimas_tarefas %}
-                    <div class="col">
-                        <div class="card bg-light h-100 p-3 shadow-sm border-1">
-                            <div class="card-body d-flex flex-column p-0">
-                                <div class="d-flex justify-content-between flex-wrap"
-                                >
-                                    <h5 class="text-primary mb-2"><strong>#{{ tarefa.id }} {{ tarefa.nome }}</strong>
-                                    </h5>
-                                    <a class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2"
-                                       href="{% url 'tarefas_editar' tarefa.id %}">
-                                        <i class="fa-solid fa-pencil"></i><span>editar</span>
-                                    </a>
-                                </div>
-
-                                <!-- flex-grow-1 empurra as ações/badges para a base do card -->
-                                <p class=" card-text text-secondary flex-grow-1">{{ tarefa.descricao }}</p>
-
-                                <div class="d-flex align-items-center gap-2 mt-3 pt-2 border-top">
-                                    {% if tarefa.completo %}
-                                        <span class="badge text-bg-success d-inline-flex align-items-center gap-1 py-2 px-3">
-                                        <i class="fa-regular fa-square-check"></i>
-                                        <span>concluída</span>
-                                    </span>
-                                        <a href="{% url 'tarefas_reabrir' tarefa.id %}"
-                                           class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2">
-                                            <i class="fa-regular fa-square-check"></i>
-                                            <span>reabrir</span>
-                                        </a>
-                                    {% else %}
-                                        <span class="badge text-bg-warning d-inline-flex align-items-center gap-1 py-2 px-3">
-                                        <i class="fa-regular fa-clock"></i>
-                                        <span>pendente</span>
-                                    </span>
-                                        <a href="{% url 'tarefas_concluir' tarefa.id %}"
-                                           class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 py-1 px-2">
-                                            <i class="fa-regular fa-square-check"></i>
-                                            <span>concluir</span>
-                                        </a>
-                                    {% endif %}
-                                </div>
+                    <article class="note">
+                        <div class="note-header">
+                            <div class="task-heading">
+                                <span class="note-number">#{{ tarefa.id }}</span>
+                                <h3 class="note-title" title="{{ tarefa.nome }}">
+                                    {{ tarefa.nome }}
+                                </h3>
                             </div>
+
+                            <a href="{% url 'tarefas_editar' tarefa.id %}"
+                               class="note-link"
+                               aria-label="editar tarefa {{ tarefa.nome }}">
+                                editar
+                            </a>
                         </div>
-                    </div>
+
+                        <p class="note-description" title="{{ tarefa.descricao }}">
+                            {{ tarefa.descricao|default:"sem descrição." }}
+                        </p>
+
+                        <div class="note-expiration">
+                            <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                            prazo:
+                            {% if tarefa.data_expiracao %}
+                                <time datetime="{{ tarefa.data_expiracao|date:'c' }}">
+                                    {{ tarefa.data_expiracao|date:"d/m/Y" }}
+                                </time>
+                            {% else %}
+                                sem prazo
+                            {% endif %}
+                        </div>
+
+                        <div class="note-footer">
+                            {% if tarefa.completo %}
+                                <span class="note-status complete">
+                                    <i class="fa-regular fa-square-check"
+                                       aria-hidden="true"></i>
+                                    concluída
+                                </span>
+
+                                <a href="{% url 'tarefas_reabrir' tarefa.id %}"
+                                   class="note-link">
+                                    reabrir
+                                    <i class="fa-solid fa-rotate-left"
+                                       aria-hidden="true"></i>
+                                </a>
+                            {% else %}
+                                <span class="note-status">
+                                    <i class="fa-regular fa-square"
+                                       aria-hidden="true"></i>
+                                    pendente
+                                </span>
+
+                                <a href="{% url 'tarefas_concluir' tarefa.id %}"
+                                   class="note-link">
+                                    concluir
+                                    <i class="fa-solid fa-check"
+                                       aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </article>
                 {% empty %}
-                    <div class="col-12">
-                        <div class="alert alert-info mb-0">nenhuma tarefa encontrada.</div>
+                    <div class="note-empty task-grid-empty">
+                        a página está em branco. suas tarefas aparecerão aqui.
                     </div>
                 {% endfor %}
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 {% endblock %}

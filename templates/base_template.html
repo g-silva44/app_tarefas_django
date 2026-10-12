@@ -5,7 +5,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Taskfy - Organize sua vida</title>
+    <title>taskfy - organize sua vida</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -19,22 +19,33 @@
     <script src="https://kit.fontawesome.com/61838a8320.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid container-sm">
-        <a class="navbar-brand text-primary" href="{% url 'index' %}"><strong>taskfy</strong></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="{% url 'tarefas_home' %}">tarefas</a>
-            </div>
-        </div>
-        <div>
-            <div>
-                <a class="nav-link" href='{% url 'pessoa_perfil' %}'>meu perfil</a>
-            </div>
+<nav class="notebook-nav" aria-label="navegação principal">
+    <div class="notebook-nav-inner">
+        <a class="notebook-brand" href="{% url 'index' %}">
+            taskfy<span>.</span>
+        </a>
+
+        <div class="notebook-links">
+            <a href="{% url 'index' %}"
+                    {% if request.resolver_match.url_name == 'index' %}
+               class="is-current" aria-current="page"
+                    {% endif %}>
+                início
+            </a>
+
+            <a href="{% url 'tarefas_home' %}"
+                    {% if request.resolver_match.url_name == 'tarefas_home' %}
+               class="is-current" aria-current="page"
+                    {% endif %}>
+                tarefas
+            </a>
+
+            <a href="{% url 'pessoa_perfil' %}"
+                    {% if request.resolver_match.url_name == 'pessoa_perfil' %}
+               class="is-current" aria-current="page"
+                    {% endif %}>
+                meu perfil
+            </a>
         </div>
     </div>
 </nav>
