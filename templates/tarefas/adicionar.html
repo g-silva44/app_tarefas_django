@@ -1,108 +1,116 @@
 {% extends 'base_template.html' %}
 
 {% block content %}
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <h3 class="card-title fw-bold text-primary mb-4">
-                            {% if form.instance.pk %}
-                                <i class="fa-solid fa-pen-to-square me-2"></i>editar tarefa
-                            {% else %}
-                                <i class="fa-solid fa-plus-circle me-2"></i>nova tarefa
-                            {% endif %}
-                        </h3>
+    <div class="notepad notebook-form-page">
+        <header class="notepad-header">
+            {% if form.instance.pk %}
+                <h1>editar tarefa.</h1>
+                <p>ajuste suas anotações.</p>
+            {% else %}
+                <h1>nova tarefa.</h1>
+                <p>comece com uma pequena anotação.</p>
+            {% endif %}
+        </header>
 
-                        <!-- Alertas de erros gerais do formulário -->
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger py-2" role="alert">
-                                {{ form.non_field_errors }}
-                            </div>
-                        {% endif %}
+        <form method="post" class="notebook-form" novalidate>
+            {% csrf_token %}
 
-                        <form method="post" novalidate>
-                            {% csrf_token %}
-
-                            <!-- Campo Nome -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold" for="id_nome">
-                                    {{ form.nome.label|default:"Nome da tarefa" }}
-                                </label>
-                                <input
-                                        type="text"
-                                        name="nome"
-                                        id="id_nome"
-                                        class="form-control {% if form.nome.errors %}is-invalid{% endif %}"
-                                        value="{{ form.nome.value|default:'' }}"
-                                        placeholder="Ex: Finalizar relatório..."
-                                        required>
-                                {% if form.nome.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.nome.errors|striptags }}
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Campo Descrição -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold" for="id_descricao">
-                                    {{ form.descricao.label|default:"Descrição" }}
-                                </label>
-                                <textarea
-                                        name="descricao"
-                                        id="id_descricao"
-                                        rows="3"
-                                        class="form-control {% if form.descricao.errors %}is-invalid{% endif %}"
-                                        placeholder="Detalhes opcionais da tarefa...">{{ form.descricao.value|default:'' }}</textarea>
-                                {% if form.descricao.errors %}
-                                    <div class="invalid-feedback">
-                                        {{ form.descricao.errors|striptags }}
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Campo Completo (Switch/Checkbox estilizado) -->
-                            <div class="mb-4 form-check form-switch">
-                                <input
-                                        type="checkbox"
-                                        name="completo"
-                                        id="id_completo"
-                                        class="form-check-input"
-                                        role="switch"
-                                        {% if form.completo.value %}checked{% endif %}>
-                                <label class="form-check-label fw-semibold" for="id_completo">
-                                    {{ form.completo.label|default:"marcar como concluída" }}
-                                </label>
-                            </div>
-
-                            <div class="mb-4 form-date">
-                                <label class="form-check-label fw-semibold" for="id_completo">
-                                    {{ form.data_expiracao.label|default:"data de expiração" }}
-                                </label>
-                                <input
-                                        type="date"
-                                        name="data_expiracao"
-                                        id="id_expiracao"
-                                        class="form-control"
-                                >
-
-                            </div>
-
-                            <!-- Botões de Ação -->
-                            <div class="d-flex justify-content-end gap-2 pt-2 border-top">
-                                <a href="{% url 'tarefas_home' %}" class="btn btn-outline-secondary">
-                                    cancelar
-                                </a>
-                                <button class="btn btn-primary d-inline-flex align-items-center" type="submit">
-                                    <i class="fa-solid fa-check me-1"></i>
-                                    salvar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+            {% if form.non_field_errors %}
+                <div class="notebook-errors" role="alert">
+                    {{ form.non_field_errors }}
                 </div>
+            {% endif %}
+
+            <div class="notebook-field">
+                <label for="{{ form.nome.id_for_label }}">nome da tarefa</label>
+
+                <input type="text"
+                       name="{{ form.nome.html_name }}"
+                       id="{{ form.nome.id_for_label }}"
+                       class="notebook-input{% if form.nome.errors %} has-error{% endif %}"
+                       value="{{ form.nome.value|default_if_none:'' }}"
+                       placeholder="ex: finalizar relatório"
+                       {% if form.nome.field.required %}required{% endif %}
+                        {% if form.nome.field.max_length %}
+                       maxlength="{{ form.nome.field.max_length }}"
+                        {% endif %}
+                        {% if form.nome.errors %}
+                       aria-invalid="true"
+                       aria-describedby="nome-errors"
+                        {% endif %}>
+
+                {% if form.nome.errors %}
+                    <div id="nome-errors" class="notebook-field-error">
+                        {{ form.nome.errors }}
+                    </div>
+                {% endif %}
             </div>
-        </div>
+
+            <div class="notebook-field">
+                <label for="{{ form.descricao.id_for_label }}">descrição</label>
+
+                <textarea name="{{ form.descricao.html_name }}"
+                          id="{{ form.descricao.id_for_label }}"
+                          rows="4"
+                          class="notebook-input notebook-textarea{% if form.descricao.errors %} has-error{% endif %}"
+                          placeholder="mais detalhes, se precisar..."
+                          {% if form.descricao.field.required %}required{% endif %}
+                        {% if form.descricao.errors %}
+                          aria-invalid="true"
+                          aria-describedby="descricao-errors"
+                        {% endif %}>{{ form.descricao.value|default_if_none:'' }}</textarea>
+
+                {% if form.descricao.errors %}
+                    <div id="descricao-errors" class="notebook-field-error">
+                        {{ form.descricao.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="notebook-field">
+                <label for="{{ form.data_expiracao.id_for_label }}">
+                    prazo da tarefa
+                </label>
+
+                {{ form.data_expiracao }}
+
+                {% if form.data_expiracao.errors %}
+                    <div id="expiracao-errors" class="notebook-field-error">
+                        {{ form.data_expiracao.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="notebook-field">
+                <label class="notebook-checkbox" for="{{ form.completo.id_for_label }}">
+                    <input type="checkbox"
+                           name="{{ form.completo.html_name }}"
+                           id="{{ form.completo.id_for_label }}"
+                           {% if form.completo.value %}checked{% endif %}
+                            {% if form.completo.errors %}
+                           aria-invalid="true"
+                           aria-describedby="completo-errors"
+                            {% endif %}>
+                    <span>marcar como concluída</span>
+                </label>
+
+                {% if form.completo.errors %}
+                    <div id="completo-errors" class="notebook-field-error">
+                        {{ form.completo.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="notebook-form-actions">
+                <a href="{% url 'tarefas_home' %}" class="note-link">
+                    cancelar
+                </a>
+
+                <button class="notebook-button" type="submit">
+                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                    salvar tarefa
+                </button>
+            </div>
+        </form>
     </div>
 {% endblock %}

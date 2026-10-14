@@ -488,6 +488,243 @@ body.app-body {
     margin-bottom: 12px;
 }
 
+/* o javascript mede as margens reais do conteúdo */
+.page-edge {
+    position: fixed;
+    top: var(--page-edge-top, 0px);
+    height: var(--page-edge-height, 0px);
+    width: var(--page-edge-width, 0px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a86454;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, background-color .2s ease;
+}
+
+.page-edge-left {
+    left: 0;
+    cursor: w-resize;
+}
+
+.page-edge-right {
+    right: 0;
+    cursor: e-resize;
+}
+
+.page-edge.is-ready {
+    pointer-events: auto;
+}
+
+.page-edge:hover,
+.page-edge:focus-visible {
+    color: #a86454;
+    opacity: 1;
+    background: rgba(168, 100, 84, .05);
+}
+
+.page-edge span {
+    font-size: 1.4rem;
+}
+
+.notebook-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e1d7;
+    font-size: .75rem;
+}
+
+.pagination-number,
+.pagination-disabled {
+    color: #777469;
+}
+
+.pagination-disabled {
+    opacity: .5;
+}
+
+#notebook-page {
+    backface-visibility: hidden;
+}
+
+#notebook-page.turn-next {
+    transform-origin: left center;
+    animation: turn-next .32s ease-in forwards;
+}
+
+#notebook-page.turn-previous {
+    transform-origin: right center;
+    animation: turn-previous .32s ease-in forwards;
+}
+
+.notebook-form-page {
+    max-width: 650px;
+    padding: 30px 36px;
+}
+
+.notebook-form-page .notepad-header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+}
+
+.notebook-form-page .notepad-header h1 {
+    font-size: 1.5rem;
+}
+
+.notebook-field {
+    margin-bottom: 24px;
+}
+
+.notebook-field > label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555044;
+    font-size: .8rem;
+}
+
+.notebook-form .notebook-input,
+.notebook-form input[type="date"],
+.notebook-form input[type="datetime-local"] {
+    display: block;
+    width: 100%;
+    padding: 9px 2px;
+    color: #44443e;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #cfc5b1;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: .85rem;
+    box-shadow: none;
+}
+
+.notebook-form .notebook-input::placeholder {
+    color: #8b887e;
+    opacity: 1;
+}
+
+.notebook-form .notebook-input:focus,
+.notebook-form input[type="date"]:focus,
+.notebook-form input[type="datetime-local"]:focus {
+    outline: none;
+    border-bottom: 2px solid #a86454;
+    box-shadow: none;
+}
+
+.notebook-form .notebook-textarea {
+    min-height: 112px;
+    padding: 0 2px;
+    line-height: 28px;
+    resize: vertical;
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 27px,
+            #e5e1d7 27px,
+            #e5e1d7 28px
+    );
+}
+
+.notebook-field .notebook-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.notebook-checkbox input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #70816b;
+}
+
+.notebook-checkbox input:focus-visible {
+    outline: 2px solid #a86454;
+    outline-offset: 3px;
+}
+
+.notebook-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #e5e1d7;
+}
+
+.notebook-errors {
+    margin-bottom: 24px;
+    padding: 12px 14px;
+    color: #934d40;
+    background: #f6eae4;
+    border-left: 2px solid #a86454;
+    font-size: .8rem;
+}
+
+.notebook-field-error {
+    margin-top: 8px;
+    color: #934d40;
+    font-size: .75rem;
+}
+
+.notebook-errors ul,
+.notebook-field-error ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.notebook-form .notebook-input.has-error,
+.notebook-form input[aria-invalid="true"] {
+    border-bottom-color: #a86454;
+}
+
+@media (max-width: 575.98px) {
+    .notebook-form-page {
+        padding: 24px 20px;
+    }
+}
+
+@keyframes turn-next {
+    to {
+        transform: perspective(1400px) rotateY(-16deg);
+        opacity: 0;
+    }
+}
+
+@keyframes turn-previous {
+    to {
+        transform: perspective(1400px) rotateY(16deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 991.98px), (hover: none) {
+    .page-edge {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #notebook-page.turn-next,
+    #notebook-page.turn-previous {
+        animation: none;
+    }
+
+    .page-edge {
+        transition: none;
+    }
+}
+
 @media (max-width: 991.98px) {
     .task-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -40,7 +40,7 @@
                             prazo:
                             {% if tarefa.data_expiracao %}
                                 <time datetime="{{ tarefa.data_expiracao|date:'c' }}">
-                                    {{ tarefa.data_expiracao|date:"d/m/Y" }}
+                                    {{ tarefa.data_expiracao|date:"d/m/Y H:i" }}
                                 </time>
                             {% else %}
                                 sem prazo
@@ -101,7 +101,7 @@
                             prazo:
                             {% if tarefa.data_expiracao %}
                                 <time datetime="{{ tarefa.data_expiracao|date:'c' }}">
-                                    {{ tarefa.data_expiracao|date:"d/m/Y" }}
+                                    {{ tarefa.data_expiracao|date:"d/m/Y H:i" }}
                                 </time>
                             {% else %}
                                 sem prazo

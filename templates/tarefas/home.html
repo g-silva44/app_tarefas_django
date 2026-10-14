@@ -1,7 +1,26 @@
 {% extends 'base_template.html' %}
 
 {% block content %}
-    <div class="notepad task-list">
+
+    {% if page_obj.has_previous %}
+        <a class="page-edge page-edge-left"
+           href="?page={{ page_obj.previous_page_number }}"
+           data-page-turn="previous"
+           aria-label="voltar à página anterior">
+            <span aria-hidden="true">←</span>
+        </a>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+        <a class="page-edge page-edge-right"
+           href="?page={{ page_obj.next_page_number }}"
+           data-page-turn="next"
+           aria-label="ir para a próxima página">
+            <span aria-hidden="true">→</span>
+        </a>
+    {% endif %}
+
+    <div class="notepad task-list" id="notebook-page">
         <header class="notepad-header task-list-header">
             <div>
                 <h1>suas tarefas.</h1>
@@ -41,7 +60,7 @@
                         prazo:
                         {% if tarefa.data_expiracao %}
                             <time datetime="{{ tarefa.data_expiracao|date:'c' }}">
-                                {{ tarefa.data_expiracao|date:"d/m/Y" }}
+                                {{ tarefa.data_expiracao|date:"d/m/Y H:i" }}
                             </time>
                         {% else %}
                             sem prazo
@@ -88,6 +107,119 @@
             {% endfor %}
         </div>
 
+        <nav class="notebook-pagination" aria-label="páginas de tarefas">
+            {% if page_obj.has_previous %}
+                <a class="note-link"
+                   href="?page={{ page_obj.previous_page_number }}"
+                   data-page-turn="previous">
+                    ← anterior
+                </a>
+            {% else %}
+                <span class="pagination-disabled">← anterior</span>
+            {% endif %}
+
+            <span class="pagination-number">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+    </span>
+
+            {% if page_obj.has_next %}
+                <a class="note-link"
+                   href="?page={{ page_obj.next_page_number }}"
+                   data-page-turn="next">
+                    próxima →
+                </a>
+            {% else %}
+                <span class="pagination-disabled">próxima →</span>
+            {% endif %}
+        </nav>
+
         {% block pagination %}{% endblock %}
     </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        (() => {
+            const page = document.getElementById('notebook-page');
+            const edges = document.querySelectorAll('.page-edge');
+            const links = document.querySelectorAll('[data-page-turn]');
+            const reducedMotion = window.matchMedia(
+                '(prefers-reduced-motion: reduce)'
+            );
+
+            if (!page) return;
+
+            let navigating = false;
+
+            function updateEdges() {
+                const bounds = page.getBoundingClientRect();
+                const viewportWidth = document.documentElement.clientWidth;
+                const top = Math.max(0, bounds.top);
+                const bottom = Math.min(window.innerHeight, bounds.bottom);
+
+                edges.forEach(edge => {
+                    const width = edge.classList.contains('page-edge-left')
+                        ? Math.max(0, bounds.left)
+                        : Math.max(0, viewportWidth - bounds.right);
+
+                    edge.style.setProperty('--page-edge-top', `${top}px`);
+                    edge.style.setProperty(
+                        '--page-edge-height',
+                        `${Math.max(0, bottom - top)}px`
+                    );
+                    edge.style.setProperty('--page-edge-width', `${width}px`);
+                    edge.classList.add('is-ready');
+                });
+            }
+
+            links.forEach(link => {
+                link.addEventListener('click', event => {
+                    // preserva abrir em outra aba e os comandos do navegador
+                    if (
+                        event.button !== 0 ||
+                        event.ctrlKey ||
+                        event.metaKey ||
+                        event.shiftKey ||
+                        event.altKey
+                    ) return;
+
+                    if (reducedMotion.matches) return;
+
+                    event.preventDefault();
+
+                    if (navigating) return;
+                    navigating = true;
+
+                    const destination = link.href;
+                    const animationClass = link.dataset.pageTurn === 'next'
+                        ? 'turn-next'
+                        : 'turn-previous';
+
+                    let finished = false;
+
+                    function navigate() {
+                        if (finished) return;
+                        finished = true;
+                        window.location.assign(destination);
+                    }
+
+                    page.addEventListener('animationend', navigate, {once: true});
+                    page.classList.add(animationClass);
+
+                    // garante a navegação mesmo se a animação for interrompida
+                    window.setTimeout(navigate, 450);
+                });
+            });
+
+            window.addEventListener('resize', updateEdges);
+            window.addEventListener('scroll', updateEdges, {passive: true});
+
+            window.addEventListener('pageshow', () => {
+                navigating = false;
+                page.classList.remove('turn-next', 'turn-previous');
+                updateEdges();
+            });
+
+            updateEdges();
+        })();
+    </script>
 {% endblock %}
